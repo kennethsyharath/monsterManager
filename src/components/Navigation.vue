@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-app-bar color="primary" dark>
+    <v-app-bar app clipped-left clipped-right color="primary" dark>
       <v-spacer/>
       <router-link class="router-text" to="/">Home</router-link>
       <v-spacer/>

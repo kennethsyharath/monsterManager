@@ -21,7 +21,7 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: (process.env
         .ELECTRON_NODE_INTEGRATION as unknown) as boolean,
-        preload: path.join(__dirname, 'preload.js')
+      preload: path.join(__dirname, 'preload.js')
     }
   });
 
@@ -80,3 +80,27 @@ if (isDevelopment) {
     });
   }
 }
+
+//Below is basic file access setup
+//We wanna move it somewhere else to be fair.
+import { ipcMain } from 'electron';
+const { dialog } = require('electron')
+
+ipcMain.on('asynchronous-message', (event, arg) => {
+  console.log(arg) // prints "ping"
+  dialog.showOpenDialog({ properties: ['openDirectory', 'multiSelections'] })
+    .then((data: any) => {
+      console.log(data);
+      console.log(typeof(data));
+      // event.reply('asynchronous-reply', 'pong')
+      if (data.filePaths.length >= 1) {
+        event.reply('asynchronous-reply', data.filePaths[0]);
+      }
+      data.filePaths.forEach(function(value: string[]) {
+        console.log(`selected folder: ${value}`);
+      })
+    });
+})
+
+
+//Above is basic file access setup
